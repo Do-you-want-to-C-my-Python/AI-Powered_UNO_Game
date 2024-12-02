@@ -50,8 +50,10 @@ public class Game {
                     upei.project.Card drawnCard = deck.drawCard();
                     System.out.println(currentPlayer + " draws a card");
                     currentPlayer.addCard(drawnCard);
+                    setCurrentColor(currentColor);
                     if (drawnCard.canPlayOn(topCard)) {
                         System.out.println(currentPlayer + " plays drawn card: " + drawnCard);
+                        setCurrentColor(drawnCard.getColor());
                         drawnCard.play(this);
                     }
                 }
@@ -67,8 +69,11 @@ public class Game {
     }
 
     public void setCurrentColor(String color) {
+        String tempColor = currentColor;
         this.currentColor = color;
-        System.out.println("Color changed to: " + color);
+        if(!currentColor.equals(tempColor)) {
+            System.out.println("Color changed to: " + color);
+        }
     }
 
     public void skipNextPlayer() {
