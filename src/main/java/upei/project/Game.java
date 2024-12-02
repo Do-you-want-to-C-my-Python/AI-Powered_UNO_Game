@@ -35,7 +35,6 @@ public class Game {
             System.out.println("\nCurrent player: " + currentPlayer);
             System.out.println("Top card: " + topCard + ", Current color: " + currentColor);
 
-            // Updated to use the correct method signature
             upei.project.Card playedCard = currentPlayer.playCard(topCard);
             if (playedCard != null) {
                 System.out.println(currentPlayer + " plays " + playedCard);
