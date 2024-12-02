@@ -40,6 +40,7 @@ public class Game {
             if (playedCard != null) {
                 System.out.println(currentPlayer + " plays " + playedCard);
                 playedCard.play(this);
+                setCurrentColor(playedCard.getColor());
                 if (currentPlayer.getHandSize() == 0) {
                     System.out.println(currentPlayer + " wins!");
                     return;
