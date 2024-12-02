@@ -1,6 +1,7 @@
-package uno;
+package upei.project;
 
-public class NumberCard extends Card {
+
+public class NumberCard extends upei.project.Card {
     private final int number;
 
     public NumberCard(String color, int number) {
@@ -13,13 +14,13 @@ public class NumberCard extends Card {
     }
 
     @Override
-    public boolean canPlayOn(Card topCard) {
-        return topCard.getColor().equals(this.color) || 
-               (topCard instanceof NumberCard && ((NumberCard) topCard).getNumber() == this.number);
+    public boolean canPlayOn(upei.project.Card topCard) {
+        return topCard.getColor().equals(this.color) ||
+                (topCard instanceof NumberCard && ((NumberCard) topCard).getNumber() == this.number);
     }
 
     @Override
-    public void play(Game game) {
+    public void play(upei.project.Game game) {
         game.setTopCard(this);
     }
 

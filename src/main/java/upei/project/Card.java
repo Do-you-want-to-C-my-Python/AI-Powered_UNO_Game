@@ -1,4 +1,5 @@
-package uno;
+package upei.project;
+
 
 public abstract class Card {
     protected final String color;
@@ -12,6 +13,6 @@ public abstract class Card {
     }
 
     public abstract boolean canPlayOn(Card topCard);
-    public abstract void play(Game game);
+    public abstract void play(upei.project.Game game);
 }
 

@@ -1,12 +1,13 @@
-package uno;
+package upei.project;
 
-public class ReverseCard extends ActionCard {
+
+public class ReverseCard extends upei.project.ActionCard {
     public ReverseCard(String color) {
         super(color, "Reverse");
     }
 
     @Override
-    public void play(Game game) {
+    public void play(upei.project.Game game) {
         game.setTopCard(this);
         game.reverseDirection();
     }

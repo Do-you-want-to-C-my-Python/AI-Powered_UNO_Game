@@ -1,17 +1,18 @@
-package uno;
+package upei.project;
 
-public class DrawFourCard extends Card {
+
+public class DrawFourCard extends upei.project.Card {
     public DrawFourCard() {
         super("Wild");
     }
 
     @Override
-    public boolean canPlayOn(Card topCard) {
-        return true;
+    public boolean canPlayOn(upei.project.Card topCard) {
+        return true; // Draw Four cards can be played on any card
     }
 
     @Override
-    public void play(Game game) {
+    public void play(upei.project.Game game) {
         String newColor = game.getCurrentPlayer().chooseColor();
         game.setTopCard(this);
         game.setCurrentColor(newColor);

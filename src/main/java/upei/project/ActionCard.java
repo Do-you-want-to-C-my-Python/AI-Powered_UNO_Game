@@ -1,6 +1,6 @@
-package uno;
+package upei.project;
 
-public abstract class ActionCard extends Card {
+public abstract class ActionCard extends upei.project.Card {
     protected final String action;
 
     public ActionCard(String color, String action) {
@@ -13,9 +13,9 @@ public abstract class ActionCard extends Card {
     }
 
     @Override
-    public boolean canPlayOn(Card topCard) {
-        return topCard.getColor().equals(this.color) || 
-               (topCard instanceof ActionCard && ((ActionCard) topCard).getAction().equals(this.action));
+    public boolean canPlayOn(upei.project.Card topCard) {
+        return topCard.getColor().equals(this.color) ||
+                (topCard instanceof ActionCard && ((ActionCard) topCard).getAction().equals(this.action));
     }
 
     @Override

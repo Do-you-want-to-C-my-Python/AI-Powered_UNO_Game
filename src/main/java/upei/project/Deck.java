@@ -1,9 +1,10 @@
-package uno;
+package upei.project;
+
 
 import java.util.*;
 
 public class Deck {
-    private List<Card> cards;
+    private List<upei.project.Card> cards;
 
     public Deck() {
         cards = new ArrayList<>();
@@ -13,22 +14,22 @@ public class Deck {
 
     private void initializeDeck() {
         String[] colors = {"Red", "Blue", "Green", "Yellow"};
-        
+
         for (String color : colors) {
             // Add number cards
-            cards.add(new NumberCard(color, 0));
+            cards.add(new upei.project.NumberCard(color, 0));
             for (int i = 1; i <= 9; i++) {
-                cards.add(new NumberCard(color, i));
-                cards.add(new NumberCard(color, i));
+                cards.add(new upei.project.NumberCard(color, i));
+                cards.add(new upei.project.NumberCard(color, i));
             }
-            
+
             // Add action cards
-            cards.add(new SkipCard(color));
-            cards.add(new SkipCard(color));
-            cards.add(new ReverseCard(color));
-            cards.add(new ReverseCard(color));
-            cards.add(new DrawTwoCard(color));
-            cards.add(new DrawTwoCard(color));
+            cards.add(new upei.project.SkipCard(color));
+            cards.add(new upei.project.SkipCard(color));
+            cards.add(new upei.project.ReverseCard(color));
+            cards.add(new upei.project.ReverseCard(color));
+            cards.add(new upei.project.DrawTwoCard(color));
+            cards.add(new upei.project.DrawTwoCard(color));
         }
     }
 
@@ -36,7 +37,7 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
-    public Card drawCard() {
+    public upei.project.Card drawCard() {
         if (isEmpty()) {
             throw new IllegalStateException("Deck is empty");
         }
