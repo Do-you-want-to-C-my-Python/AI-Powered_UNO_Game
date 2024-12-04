@@ -5,7 +5,7 @@ import java.util.*;
 public class SimulationExperiment {
 
     private static final int TRIALS = 10000;
-    private static final int NUM_PLAYERS = 4;
+    private static final int NUM_PLAYERS = 3;
 
     public static void main(String[] args) {
         int[] wins = new int[3];
@@ -24,7 +24,7 @@ public class SimulationExperiment {
         System.out.println("First Available Card Strategy: " + wins[0] + " wins");
         System.out.println("Number Card First Strategy: " + wins[1] + " wins");
         System.out.println("Action Card First Strategy: " + wins[2] + " wins");
-        System.out.println("Player 1 & 4 played the first available card");
+        System.out.println("Player 1 played the first available card");
         System.out.println("Player 2 played the number cards first");
         System.out.println("Player 3 played the action cards first");
     }
