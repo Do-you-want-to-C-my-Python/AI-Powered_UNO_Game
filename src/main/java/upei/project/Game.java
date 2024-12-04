@@ -4,12 +4,12 @@ package upei.project;
 import java.util.*;
 
 public class Game {
-    private List<upei.project.Player> players;
-    private upei.project.Deck deck;
-    private upei.project.Card topCard;
-    private int currentPlayerIndex;
-    private boolean isReversed;
-    private String currentColor;
+    protected List<upei.project.Player> players;
+    protected upei.project.Deck deck;
+    protected upei.project.Card topCard;
+    protected int currentPlayerIndex;
+    protected boolean isReversed;
+    protected String currentColor;
 
     public Game(List<upei.project.Player> players) {
         this.players = players;
@@ -21,7 +21,7 @@ public class Game {
         this.currentColor = topCard.getColor();
     }
 
-    private void dealInitialCards() {
+    protected void dealInitialCards() {
         for (upei.project.Player player : players) {
             for (int i = 0; i < 7; i++) {
                 player.addCard(deck.drawCard());
@@ -92,7 +92,7 @@ public class Game {
         }
     }
 
-    private void moveToNextPlayer() {
+    protected void moveToNextPlayer() {
         if (isReversed) {
             currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
         } else {
@@ -104,14 +104,14 @@ public class Game {
         return players.get(currentPlayerIndex);
     }
 
-    private upei.project.Player getNextPlayer() {
+    protected upei.project.Player getNextPlayer() {
         int nextPlayerIndex = isReversed ?
                 (currentPlayerIndex - 1 + players.size()) % players.size() :
                 (currentPlayerIndex + 1) % players.size();
         return players.get(nextPlayerIndex);
     }
 
-    private boolean isGameOver() {
+    protected boolean isGameOver() {
         return deck.isEmpty();
     }
 
@@ -121,6 +121,16 @@ public class Game {
 
     public String getCurrentColor() {
         return currentColor;
+    }
+
+    public int getCurrentPlayerIndex()
+    {
+        return currentPlayerIndex;
+    }
+
+    public Deck getDeck()
+    {
+        return deck;
     }
 }
 
