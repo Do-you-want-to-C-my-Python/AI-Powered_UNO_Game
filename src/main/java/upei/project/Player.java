@@ -19,16 +19,9 @@ public class Player {
 
     //First strategy. Player plays the first available card.
     public Card playCard(Card topCard) {
-        // First try to play matching cards (non-wild)
+        // Play the first card that can be played
         for (Card card : hand) {
-            if (!(card instanceof WildCard) && card.canPlayOn(topCard)) {
-                hand.remove(card);
-                return card;
-            }
-        }
-        // Then try wild cards if no matching cards found
-        for (Card card : hand) {
-            if (card instanceof WildCard) {
+            if (card.canPlayOn(topCard) || card instanceof WildCard) {
                 hand.remove(card);
                 return card;
             }
@@ -38,30 +31,32 @@ public class Player {
 
     //Second strategy. Play number cards first and save the best for last :)
     public Card playNumberCardFirst(Card topCard) {
-        // First try to play matching cards
-        if (topCard instanceof ActionCard && !(topCard instanceof DrawTwoCard) && !(topCard instanceof DrawFourCard)) {
-            for (Card card : hand) {
-                if (card.getClass().equals(topCard.getClass())) {
-                    hand.remove(card);
-                    return card;
-                }
-            }
-        }
-
-        // Then try number cards
+        // First try number cards
         for (Card card : hand) {
             if (card.canPlayOn(topCard) && card instanceof NumberCard) {
                 hand.remove(card);
                 return card;
             }
         }
-        // Then try action cards
+
+        // Then try matching action cards
+        if (topCard instanceof ActionCard && !(topCard instanceof DrawTwoCard) && !(topCard instanceof DrawFourCard)) {
+            for (Card card : hand) {
+                if (card.getClass().equals(topCard.getClass()) && card.canPlayOn(topCard)) {
+                    hand.remove(card);
+                    return card;
+                }
+            }
+        }
+
+        // Then try other action cards
         for (Card card : hand) {
             if (card.canPlayOn(topCard) && card instanceof ActionCard) {
                 hand.remove(card);
                 return card;
             }
         }
+
         // Finally try wild cards
         for (Card card : hand) {
             if (card instanceof WildCard) {
@@ -74,37 +69,62 @@ public class Player {
 
     //Third strategy. Play action cards first then numbers. Not saving the best for last :(
     public Card playActionCardFirst(Card topCard) {
-        // First try to play matching action cards (except Draw cards)
-        if (topCard instanceof ActionCard && !(topCard instanceof DrawTwoCard) && !(topCard instanceof DrawFourCard)) {
-            for (Card card : hand) {
-                if (card.getClass().equals(topCard.getClass())) {
-                    hand.remove(card);
-                    return card;
-                }
+        // First try to play Draw Four cards
+        for (Card card : hand) {
+            if (card instanceof DrawFourCard && card.canPlayOn(topCard)) {
+                hand.remove(card);
+                return card;
             }
         }
 
-        // Then try wild cards
+        // Then try Draw Two cards
         for (Card card : hand) {
-            if (card instanceof WildCard) {
+            if (card instanceof DrawTwoCard && card.canPlayOn(topCard)) {
                 hand.remove(card);
                 return card;
             }
         }
-        // Then try action cards
+
+        // Then try Skip cards
         for (Card card : hand) {
-            if (card.canPlayOn(topCard) && card instanceof ActionCard) {
+            if (card instanceof SkipCard && card.canPlayOn(topCard)) {
                 hand.remove(card);
                 return card;
             }
         }
-        // Finally try number cards
+
+        // Then try Reverse cards
         for (Card card : hand) {
-            if (card.canPlayOn(topCard) && card instanceof NumberCard) {
+            if (card instanceof ReverseCard && card.canPlayOn(topCard)) {
                 hand.remove(card);
                 return card;
             }
         }
+
+        // Then try other action cards
+        for (Card card : hand) {
+            if (card instanceof ActionCard && !(card instanceof WildCard) && card.canPlayOn(topCard)) {
+                hand.remove(card);
+                return card;
+            }
+        }
+
+        // Then try number cards
+        for (Card card : hand) {
+            if (card instanceof NumberCard && card.canPlayOn(topCard)) {
+                hand.remove(card);
+                return card;
+            }
+        }
+
+        // Finally try wild cards (non-Draw Four)
+        for (Card card : hand) {
+            if (card instanceof WildCard && !(card instanceof DrawFourCard)) {
+                hand.remove(card);
+                return card;
+            }
+        }
+
         return null;
     }
 
@@ -131,7 +151,6 @@ public class Player {
     public int getHandSize() {
         return hand.size();
     }
-
     public List<Card> getHand() {
         return new ArrayList<>(hand);
     }
@@ -183,4 +202,3 @@ public class Player {
         return this.hasCalledUno;
     }
 }
-

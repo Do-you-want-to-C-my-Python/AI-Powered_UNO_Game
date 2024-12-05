@@ -23,9 +23,9 @@ public class ThreePlayerMain {
         players.add(player3);
 
         System.out.println("Players:");
-        System.out.println("1. " + player1 + " - Using First Available Strategy");
-        System.out.println("2. " + player2 + " - Using Number First Strategy");
-        System.out.println("3. " + player3 + " - Using Action First Strategy\n");
+        System.out.println("1. " + player1);
+        System.out.println("2. " + player2);
+        System.out.println("3. " + player3+"\n");
 
         // Create and play the game
         Game game = new Game(players);
@@ -115,13 +115,14 @@ public class ThreePlayerMain {
     }
 
     private static TurnResult playTurn(Game game, Player currentPlayer) {
-        Card playedCard = null;
+        Card playedCard;
         Card drawnCard = null;
 
         if (game.getDrawTwoCount() > 0) {
             playedCard = currentPlayer.playDrawTwo(game.getTopCard());
             if (playedCard == null) {
                 System.out.println(currentPlayer + " draws " + (2 * game.getDrawTwoCount()) + " cards");
+                System.out.println(currentPlayer + " turn skipped");
                 game.drawCards(2 * game.getDrawTwoCount());
                 return new TurnResult(null, null);
             }
@@ -129,6 +130,7 @@ public class ThreePlayerMain {
             playedCard = currentPlayer.playDrawFour();
             if (playedCard == null) {
                 System.out.println(currentPlayer + " draws " + (4 * game.getDrawFourCount()) + " cards");
+                System.out.println(currentPlayer + " turn skipped");
                 game.drawCards(4 * game.getDrawFourCount());
                 return new TurnResult(null, null);
             }
@@ -140,12 +142,15 @@ public class ThreePlayerMain {
             };
             if (playedCard == null && !game.getDeck().isEmpty()) {
                 drawnCard = game.getDeck().drawCard();
-                currentPlayer.addCard(drawnCard);
                 if (game.canPlayCard(drawnCard)) {
+                    System.out.println(currentPlayer + " draws a card");
                     System.out.println(currentPlayer + " plays drawn card: " + drawnCard);
                     playedCard = drawnCard;
                 } else {
+                    currentPlayer.addCard(drawnCard);
                     System.out.println(currentPlayer + " draws a card");
+                    System.out.println(currentPlayer + " turn skipped");
+                    game.moveToNextPlayer();
                 }
             }
         }

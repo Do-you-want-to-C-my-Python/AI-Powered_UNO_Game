@@ -122,7 +122,9 @@ public class Game {
 
         // Handle special cards
         if (card instanceof SkipCard) {
+            Player skippedPlayer = getNextPlayer();
             moveToNextPlayer(); // Skip next player
+            System.out.println(skippedPlayer + " turn skipped");
         } else if (card instanceof ReverseCard) {
             reverseDirection();
         } else if (card instanceof DrawTwoCard) {
@@ -189,4 +191,3 @@ public class Game {
         }
     }
 }
-

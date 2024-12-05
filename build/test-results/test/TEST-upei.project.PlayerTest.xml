@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="upei.project.PlayerTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2024-12-04T21:40:21" hostname="Justputhebagbro.ht.home" time="0.046">
+  <properties/>
+  <testcase name="testAddCard()" classname="upei.project.PlayerTest" time="0.022"/>
+  <testcase name="testPlayCardFirstStrategy()" classname="upei.project.PlayerTest" time="0.005"/>
+  <testcase name="testPlayNumberCardFirstStrategy()" classname="upei.project.PlayerTest" time="0.002"/>
+  <testcase name="testInitialState()" classname="upei.project.PlayerTest" time="0.002"/>
+  <testcase name="testPlayActionCardFirstStrategy()" classname="upei.project.PlayerTest" time="0.002"/>
+  <testcase name="testChooseColor()" classname="upei.project.PlayerTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

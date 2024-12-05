@@ -6,6 +6,11 @@ public class DrawTwoCard extends ActionCard {
     }
 
     @Override
+    public boolean canPlayOn(Card other) {
+        return color.equals(other.getColor()) || other instanceof DrawTwoCard || color.equals("Wild");
+    }
+
+    @Override
     public String toString() {
         return color + " Draw Two";
     }

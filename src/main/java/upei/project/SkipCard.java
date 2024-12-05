@@ -6,6 +6,11 @@ public class SkipCard extends ActionCard {
     }
 
     @Override
+    public boolean canPlayOn(Card other) {
+        return color.equals(other.getColor()) || other instanceof SkipCard || color.equals("Wild");
+    }
+
+    @Override
     public String toString() {
         return color + " Skip";
     }
