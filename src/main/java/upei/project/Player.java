@@ -19,7 +19,24 @@ public class Player {
 
     //First strategy. Player plays the first available card.
     public Card playCard(Card topCard) {
-        // Play the first card that can be played
+        // First check if we need to respond to a Draw card
+        if (topCard instanceof DrawTwoCard) {
+            for (Card card : hand) {
+                if (card instanceof DrawTwoCard) {
+                    hand.remove(card);
+                    return card;
+                }
+            }
+        } else if (topCard instanceof DrawFourCard) {
+            for (Card card : hand) {
+                if (card instanceof DrawFourCard) {
+                    hand.remove(card);
+                    return card;
+                }
+            }
+        }
+
+        // If no Draw card to respond with, follow normal strategy
         for (Card card : hand) {
             if (card.canPlayOn(topCard) || card instanceof WildCard) {
                 hand.remove(card);
@@ -31,6 +48,24 @@ public class Player {
 
     //Second strategy. Play number cards first and save the best for last :)
     public Card playNumberCardFirst(Card topCard) {
+        // First check if we need to respond to a Draw card
+        if (topCard instanceof DrawTwoCard) {
+            for (Card card : hand) {
+                if (card instanceof DrawTwoCard) {
+                    hand.remove(card);
+                    return card;
+                }
+            }
+        } else if (topCard instanceof DrawFourCard) {
+            for (Card card : hand) {
+                if (card instanceof DrawFourCard) {
+                    hand.remove(card);
+                    return card;
+                }
+            }
+        }
+
+        // If no Draw card to respond with, follow normal strategy
         // First try number cards
         for (Card card : hand) {
             if (card.canPlayOn(topCard) && card instanceof NumberCard) {
@@ -69,9 +104,35 @@ public class Player {
 
     //Third strategy. Play action cards first then numbers. Not saving the best for last :(
     public Card playActionCardFirst(Card topCard) {
-        // First try to play Draw Four cards
+        // First check if we need to respond to a Draw card
+        if (topCard instanceof DrawTwoCard) {
+            for (Card card : hand) {
+                if (card instanceof DrawTwoCard) {
+                    hand.remove(card);
+                    return card;
+                }
+            }
+        } else if (topCard instanceof DrawFourCard) {
+            for (Card card : hand) {
+                if (card instanceof DrawFourCard) {
+                    hand.remove(card);
+                    return card;
+                }
+            }
+        }
+
+        // If no Draw card to respond with, follow normal strategy
+        // First try to play Draw Four cards - these can always be played
         for (Card card : hand) {
-            if (card instanceof DrawFourCard && card.canPlayOn(topCard)) {
+            if (card instanceof DrawFourCard) {
+                hand.remove(card);
+                return card;
+            }
+        }
+
+        // Then try regular Wild cards - these can also always be played
+        for (Card card : hand) {
+            if (card instanceof WildCard && !(card instanceof DrawFourCard)) {
                 hand.remove(card);
                 return card;
             }
@@ -109,17 +170,9 @@ public class Player {
             }
         }
 
-        // Then try number cards
+        // Finally try number cards
         for (Card card : hand) {
             if (card instanceof NumberCard && card.canPlayOn(topCard)) {
-                hand.remove(card);
-                return card;
-            }
-        }
-
-        // Finally try wild cards (non-Draw Four)
-        for (Card card : hand) {
-            if (card instanceof WildCard && !(card instanceof DrawFourCard)) {
                 hand.remove(card);
                 return card;
             }
