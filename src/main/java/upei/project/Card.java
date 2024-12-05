@@ -1,8 +1,7 @@
 package upei.project;
 
-
 public abstract class Card {
-    protected final String color;
+    protected String color;
 
     public Card(String color) {
         this.color = color;
@@ -12,7 +11,9 @@ public abstract class Card {
         return color;
     }
 
-    public abstract boolean canPlayOn(Card topCard);
-    public abstract void play(upei.project.Game game);
-}
+    public void setColor(String color) {
+        this.color = color;
+    }
 
+    public abstract boolean canPlayOn(Card other);
+}

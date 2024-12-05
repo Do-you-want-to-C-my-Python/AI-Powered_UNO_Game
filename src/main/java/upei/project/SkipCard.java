@@ -1,15 +1,12 @@
 package upei.project;
 
-
-public class SkipCard extends upei.project.ActionCard {
+public class SkipCard extends ActionCard {
     public SkipCard(String color) {
-        super(color, "Skip");
+        super(color);
     }
 
     @Override
-    public void play(upei.project.Game game) {
-        game.setTopCard(this);
-        game.skipNextPlayer();
+    public String toString() {
+        return color + " Skip";
     }
 }
-

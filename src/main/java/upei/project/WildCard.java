@@ -1,26 +1,25 @@
 package upei.project;
 
-
-public class WildCard extends upei.project.Card {
+public class WildCard extends Card {
     public WildCard() {
         super("Wild");
     }
 
     @Override
-    public boolean canPlayOn(upei.project.Card topCard) {
-        return true; // Wild cards can be played on any card
-    }
-
-    @Override
-    public void play(upei.project.Game game) {
-        String newColor = game.getCurrentPlayer().chooseColor();
-        game.setTopCard(this);
-        game.setCurrentColor(newColor);
+    public boolean canPlayOn(Card other) {
+        // Wild cards can be played on any card
+        return true;
     }
 
     @Override
     public String toString() {
-        return "Wild";
+        if (color.equals("Wild")) {
+            return "Wild";
+        }
+        return "Wild (" + color + ")";
+    }
+
+    public void setCurrentColor(String newColor) {
+        this.color = newColor;
     }
 }
-

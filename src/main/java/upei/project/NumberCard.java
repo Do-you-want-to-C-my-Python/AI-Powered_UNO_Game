@@ -1,8 +1,7 @@
 package upei.project;
 
-
-public class NumberCard extends upei.project.Card {
-    private final int number;
+public class NumberCard extends Card {
+    private int number;
 
     public NumberCard(String color, int number) {
         super(color);
@@ -14,14 +13,10 @@ public class NumberCard extends upei.project.Card {
     }
 
     @Override
-    public boolean canPlayOn(upei.project.Card topCard) {
-        return topCard.getColor().equals(this.color) ||
-                (topCard instanceof NumberCard && ((NumberCard) topCard).getNumber() == this.number);
-    }
-
-    @Override
-    public void play(upei.project.Game game) {
-        game.setTopCard(this);
+    public boolean canPlayOn(Card other) {
+        return color.equals(other.getColor()) ||
+                (other instanceof NumberCard &&
+                        number == ((NumberCard) other).getNumber());
     }
 
     @Override
@@ -29,4 +24,3 @@ public class NumberCard extends upei.project.Card {
         return color + " " + number;
     }
 }
-

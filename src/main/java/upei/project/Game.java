@@ -1,136 +1,192 @@
 package upei.project;
 
-
 import java.util.*;
 
 public class Game {
-    protected List<upei.project.Player> players;
-    protected upei.project.Deck deck;
-    protected upei.project.Card topCard;
-    protected int currentPlayerIndex;
-    protected boolean isReversed;
-    protected String currentColor;
+    private List<Player> players;
+    private Deck deck;
+    private Card topCard;
+    private String currentColor;
+    private int currentPlayerIndex;
+    private boolean isReversed;
+    private int drawTwoCount = 0;
+    private int drawFourCount = 0;
 
-    public Game(List<upei.project.Player> players) {
+    public Game(List<Player> players) {
         this.players = players;
-        this.deck = new upei.project.Deck();
+        this.deck = new Deck();
         this.currentPlayerIndex = 0;
         this.isReversed = false;
-        dealInitialCards();
-        this.topCard = deck.drawCard();
-        this.currentColor = topCard.getColor();
-    }
 
-    protected void dealInitialCards() {
-        for (upei.project.Player player : players) {
+        // Deal initial cards
+        for (Player player : players) {
             for (int i = 0; i < 7; i++) {
                 player.addCard(deck.drawCard());
             }
         }
+
+        // Set initial top card (keep drawing until we get a number card)
+        do {
+            topCard = deck.drawCard();
+        } while (!(topCard instanceof NumberCard));
+
+        currentColor = topCard.getColor();
     }
 
-    public void play() {
-        while (!isGameOver()) {
-            upei.project.Player currentPlayer = getCurrentPlayer();
-            System.out.println("\nCurrent player: " + currentPlayer);
-            System.out.println("Top card: " + topCard + ", Current color: " + currentColor);
-
-            upei.project.Card playedCard = currentPlayer.playCard(topCard);
-            if (playedCard != null) {
-                System.out.println(currentPlayer + " plays " + playedCard);
-                playedCard.play(this);
-                setCurrentColor(playedCard.getColor());
-                if (currentPlayer.getHandSize() == 0) {
-                    System.out.println(currentPlayer + " wins!");
-                    return;
-                }
-            } else {
-                if (!deck.isEmpty()) {
-                    upei.project.Card drawnCard = deck.drawCard();
-                    System.out.println(currentPlayer + " draws a card");
-                    currentPlayer.addCard(drawnCard);
-                    setCurrentColor(currentColor);
-                    if (drawnCard.canPlayOn(topCard)) {
-                        System.out.println(currentPlayer + " plays drawn card: " + drawnCard);
-                        setCurrentColor(drawnCard.getColor());
-                        drawnCard.play(this);
-                    }
-                }
+    public void moveToNextPlayer() {
+        if (isReversed) {
+            currentPlayerIndex--;
+            if (currentPlayerIndex < 0) {
+                currentPlayerIndex = players.size() - 1;
             }
-
-            moveToNextPlayer();
-        }
-        System.out.println("Game over. Deck is empty.");
-    }
-
-    public void setTopCard(upei.project.Card card) {
-        this.topCard = card;
-    }
-
-    public void setCurrentColor(String color) {
-        String tempColor = currentColor;
-        this.currentColor = color;
-        if(!currentColor.equals(tempColor)) {
-            System.out.println("Color changed to: " + color);
+        } else {
+            currentPlayerIndex++;
+            if (currentPlayerIndex >= players.size()) {
+                currentPlayerIndex = 0;
+            }
         }
     }
 
-    public void skipNextPlayer() {
-        moveToNextPlayer();
+    public Player getNextPlayer() {
+        int nextIndex;
+        if (isReversed) {
+            nextIndex = currentPlayerIndex - 1;
+            if (nextIndex < 0) {
+                nextIndex = players.size() - 1;
+            }
+        } else {
+            nextIndex = currentPlayerIndex + 1;
+            if (nextIndex >= players.size()) {
+                nextIndex = 0;
+            }
+        }
+        return players.get(nextIndex);
     }
 
     public void reverseDirection() {
         isReversed = !isReversed;
+        if (players.size() == 2) {
+            moveToNextPlayer(); // In 2-player game, reverse acts like skip
+        }
     }
 
-    public void drawCards(int numCards) {
-        upei.project.Player nextPlayer = getNextPlayer();
-        for (int i = 0; i < numCards; i++) {
-            if (!deck.isEmpty()) {
-                nextPlayer.addCard(deck.drawCard());
+    public boolean isGameOver() {
+        for (Player player : players) {
+            if (player.getHandSize() == 0) {
+                return true;
             }
         }
-    }
-
-    protected void moveToNextPlayer() {
-        if (isReversed) {
-            currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
-        } else {
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        }
-    }
-
-    public upei.project.Player getCurrentPlayer() {
-        return players.get(currentPlayerIndex);
-    }
-
-    protected upei.project.Player getNextPlayer() {
-        int nextPlayerIndex = isReversed ?
-                (currentPlayerIndex - 1 + players.size()) % players.size() :
-                (currentPlayerIndex + 1) % players.size();
-        return players.get(nextPlayerIndex);
-    }
-
-    protected boolean isGameOver() {
         return deck.isEmpty();
     }
 
-    public upei.project.Card getTopCard() {
+    public Player getWinner() {
+        Player winner = players.get(0);
+        int minCards = winner.getHandSize();
+
+        for (Player player : players) {
+            if (player.getHandSize() < minCards) {
+                winner = player;
+                minCards = player.getHandSize();
+            }
+        }
+
+        return winner;
+    }
+
+    public Player getCurrentPlayer() {
+        return players.get(currentPlayerIndex);
+    }
+
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
+    public Card getTopCard() {
         return topCard;
+    }
+
+    public void setTopCard(Card card) {
+        this.topCard = card;
+        if (card instanceof WildCard) {
+            String chosenColor = getCurrentPlayer().chooseColor();
+            ((WildCard) card).setCurrentColor(chosenColor);
+            this.currentColor = chosenColor;
+            System.out.println(getCurrentPlayer() + " chose " + chosenColor);
+
+            if (card instanceof DrawFourCard) {
+                drawFourCount++;
+            }
+        } else {
+            this.currentColor = card.getColor();
+        }
+
+        // Handle special cards
+        if (card instanceof SkipCard) {
+            moveToNextPlayer(); // Skip next player
+        } else if (card instanceof ReverseCard) {
+            reverseDirection();
+        } else if (card instanceof DrawTwoCard) {
+            drawTwoCount++;
+        }
+
+        moveToNextPlayer(); // Move to next player
+    }
+
+    public boolean canPlayCard(Card card) {
+        if (drawTwoCount > 0 && !(card instanceof DrawTwoCard)) {
+            return false; // Player must play a Draw Two or draw cards
+        }
+        if (drawFourCount > 0 && !(card instanceof DrawFourCard)) {
+            return false; // Player must play a Draw Four or draw cards
+        }
+
+        if (card instanceof WildCard) {
+            return true;
+        }
+
+        return card.getColor().equals(currentColor) ||
+                (topCard instanceof NumberCard && card instanceof NumberCard &&
+                        ((NumberCard) topCard).getNumber() == ((NumberCard) card).getNumber());
+    }
+
+    public void drawCards(int count) {
+        Player player = getCurrentPlayer();
+        for (int i = 0; i < count && !deck.isEmpty(); i++) {
+            player.addCard(deck.drawCard());
+        }
+        if (drawTwoCount > 0 || drawFourCount > 0) {
+            drawTwoCount = 0;
+            drawFourCount = 0;
+            moveToNextPlayer(); // Skip turn after drawing for Draw Two or Draw Four
+        }
     }
 
     public String getCurrentColor() {
         return currentColor;
     }
 
-    public int getCurrentPlayerIndex()
-    {
-        return currentPlayerIndex;
+    public void setCurrentColor(String color) {
+        this.currentColor = color;
     }
 
-    public Deck getDeck()
-    {
+    public Deck getDeck() {
         return deck;
+    }
+
+    public int getDrawTwoCount() {
+        return drawTwoCount;
+    }
+
+    public int getDrawFourCount() {
+        return drawFourCount;
+    }
+
+    public void checkForMissedUnoCall(Player player) {
+        if (player.getHandSize() == 1 && !player.hasCalledUno()) {
+            System.out.println(player + " forgot to call UNO! Drawing 2 cards as penalty.");
+            player.addCard(deck.drawCard());
+            player.addCard(deck.drawCard());
+        }
     }
 }
 

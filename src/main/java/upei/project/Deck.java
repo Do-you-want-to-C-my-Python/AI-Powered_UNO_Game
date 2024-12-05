@@ -1,10 +1,9 @@
 package upei.project;
 
-
 import java.util.*;
 
 public class Deck {
-    private List<upei.project.Card> cards;
+    private List<Card> cards;
 
     public Deck() {
         cards = new ArrayList<>();
@@ -17,19 +16,25 @@ public class Deck {
 
         for (String color : colors) {
             // Add number cards
-            cards.add(new upei.project.NumberCard(color, 0));
+            cards.add(new NumberCard(color, 0));
             for (int i = 1; i <= 9; i++) {
-                cards.add(new upei.project.NumberCard(color, i));
-                cards.add(new upei.project.NumberCard(color, i));
+                cards.add(new NumberCard(color, i));
+                cards.add(new NumberCard(color, i));
             }
 
             // Add action cards
-            cards.add(new upei.project.SkipCard(color));
-            cards.add(new upei.project.SkipCard(color));
-            cards.add(new upei.project.ReverseCard(color));
-            cards.add(new upei.project.ReverseCard(color));
-            cards.add(new upei.project.DrawTwoCard(color));
-            cards.add(new upei.project.DrawTwoCard(color));
+            cards.add(new SkipCard(color));
+            cards.add(new SkipCard(color));
+            cards.add(new ReverseCard(color));
+            cards.add(new ReverseCard(color));
+            cards.add(new DrawTwoCard(color));
+            cards.add(new DrawTwoCard(color));
+        }
+
+        // Add Wild cards (4 of each)
+        for (int i = 0; i < 4; i++) {
+            cards.add(new WildCard());
+            cards.add(new DrawFourCard());
         }
     }
 
@@ -37,7 +42,7 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
-    public upei.project.Card drawCard() {
+    public Card drawCard() {
         if (isEmpty()) {
             throw new IllegalStateException("Deck is empty");
         }
@@ -47,5 +52,8 @@ public class Deck {
     public boolean isEmpty() {
         return cards.isEmpty();
     }
-}
 
+    public int getSize() {
+        return cards.size();
+    }
+}
