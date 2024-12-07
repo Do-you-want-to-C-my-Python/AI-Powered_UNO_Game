@@ -57,7 +57,8 @@ public class TwoPlayerMain {
             System.out.println("\nCurrent hands:");
             displayPlayerHand(player1);
             displayPlayerHand(player2);
-            System.out.println("Cards left in deck: " + game.getDeck().getSize());
+            System.out.println();
+            System.out.println("Cards left in deck: " + game.getDeck().getSize()+"\n");
 
             Card playedCard;
             if (game.getCurrentPlayerIndex() % 2 == 0) {

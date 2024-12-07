@@ -111,7 +111,6 @@ public class Game {
             String chosenColor = getCurrentPlayer().chooseColor();
             ((WildCard) card).setCurrentColor(chosenColor);
             this.currentColor = chosenColor;
-            System.out.println(getCurrentPlayer() + " chose " + chosenColor);
 
             if (card instanceof DrawFourCard) {
                 drawFourCount++;
@@ -122,9 +121,7 @@ public class Game {
 
         // Handle special cards
         if (card instanceof SkipCard) {
-            Player skippedPlayer = getNextPlayer();
             moveToNextPlayer(); // Skip next player
-            System.out.println(skippedPlayer + " turn skipped");
         } else if (card instanceof ReverseCard) {
             reverseDirection();
         } else if (card instanceof DrawTwoCard) {
@@ -153,9 +150,18 @@ public class Game {
 
     public void drawCards(int count) {
         Player player = getCurrentPlayer();
-        for (int i = 0; i < count && !deck.isEmpty(); i++) {
+        int cardsDrawn = 0;
+
+        // Draw as many cards as possible up to count
+        while (cardsDrawn < count && !deck.isEmpty()) {
             player.addCard(deck.drawCard());
+            cardsDrawn++;
         }
+
+        if (cardsDrawn < count) {
+            System.out.println("Warning: Could only draw " + cardsDrawn + " cards instead of " + count + " (deck depleted)");
+        }
+
         if (drawTwoCount > 0 || drawFourCount > 0) {
             drawTwoCount = 0;
             drawFourCount = 0;
@@ -181,6 +187,10 @@ public class Game {
 
     public int getDrawFourCount() {
         return drawFourCount;
+    }
+
+    public boolean isReversed() {
+        return isReversed;
     }
 
     public void checkForMissedUnoCall(Player player) {

@@ -14,7 +14,7 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         player = new Player("TestPlayer");
-        topCard = new NumberCard("RED", 5);
+        topCard = new NumberCard("Red", 5);
     }
 
     @Test
@@ -25,7 +25,7 @@ class PlayerTest {
 
     @Test
     void testAddCard() {
-        Card card = new NumberCard("BLUE", 7);
+        Card card = new NumberCard("Blue", 7);
         player.addCard(card);
         assertEquals(1, player.getHandSize());
     }
@@ -33,14 +33,14 @@ class PlayerTest {
     @Test
     void testPlayCardFirstStrategy() {
         // Add playable card
-        Card playableCard = new NumberCard("RED", 7); // Same color as topCard
+        Card playableCard = new NumberCard("Red", 7);
         player.addCard(playableCard);
         Card played = player.playCard(topCard);
         assertNotNull(played);
         assertEquals(0, player.getHandSize());
 
         // Test with unplayable card
-        Card unplayableCard = new NumberCard("BLUE", 2);
+        Card unplayableCard = new NumberCard("Blue", 2);
         player.addCard(unplayableCard);
         played = player.playCard(topCard);
         assertNull(played);
@@ -50,8 +50,8 @@ class PlayerTest {
     @Test
     void testPlayNumberCardFirstStrategy() {
         // Add both number and action cards
-        Card numberCard = new NumberCard("RED", 7);
-        Card actionCard = new DrawTwoCard("RED");
+        Card numberCard = new NumberCard("Red", 7);
+        Card actionCard = new DrawTwoCard("Red");
         player.addCard(actionCard);
         player.addCard(numberCard);
 
@@ -69,8 +69,8 @@ class PlayerTest {
     @Test
     void testPlayActionCardFirstStrategy() {
         // Add both number and action cards
-        Card numberCard = new NumberCard("RED", 7);
-        Card actionCard = new DrawTwoCard("RED");
+        Card numberCard = new NumberCard("Red", 7);
+        Card actionCard = new DrawTwoCard("Red");
         player.addCard(numberCard);
         player.addCard(actionCard);
 
@@ -89,5 +89,14 @@ class PlayerTest {
     void testChooseColor() {
         String color = player.chooseColor();
         assertTrue(Arrays.asList("Red", "Blue", "Green", "Yellow").contains(color));
+    }
+
+    @Test
+    void testUnoCallAndReset() {
+        assertFalse(player.hasCalledUno());
+        player.callUno();
+        assertTrue(player.hasCalledUno());
+        player.resetUnoCall();
+        assertFalse(player.hasCalledUno());
     }
 }

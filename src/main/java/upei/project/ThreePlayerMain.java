@@ -39,7 +39,7 @@ public class ThreePlayerMain {
 
             // Display all players' hands
             displayPlayerHands(players);
-            System.out.println("Cards left in deck: " + game.getDeck().getSize());
+            System.out.println("Cards left in deck: " + game.getDeck().getSize()+"\n");
 
             TurnResult result = playTurn(game, currentPlayer);
             Card playedCard = result.playedCard;
@@ -112,6 +112,7 @@ public class ThreePlayerMain {
         for (Player player : players) {
             displayPlayerHand(player);
         }
+        System.out.println();
     }
 
     private static TurnResult playTurn(Game game, Player currentPlayer) {
