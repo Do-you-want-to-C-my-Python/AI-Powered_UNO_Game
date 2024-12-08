@@ -2,36 +2,49 @@ package upei.project;
 
 import java.util.*;
 
+/**
+ * Main class for running two-player UNO strategy comparisons.
+ * Tests different strategy combinations in head-to-head matchups.
+ */
 public class TwoPlayerMain {
+    /**
+     * Names of the different strategies being tested.
+     * - First Available: Plays the first valid card found
+     * - Number First: Prioritizes playing number cards
+     * - Action First: Prioritizes playing action cards
+     */
     private static final String[] STRATEGY_NAMES = {
             "First Available Card Strategy",
             "Number Card First Strategy",
             "Action Card First Strategy"
     };
 
+    /**
+     * Main method that runs specified strategy matchups.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         System.out.println("=== UNO Two Player Matchups ===\n");
 
-        // Play all possible combinations
+        // Play specified combinations
         playMatch(0, 1); // First Available vs Number First
-        System.out.println("\n" + "=".repeat(50) + "\n");
-
-        playMatch(1, 2); // Number First vs Action First
-        System.out.println("\n" + "=".repeat(50) + "\n");
+        System.out.println("\n" + "=".repeat(1000) + "\n");
 
         playMatch(0, 2); // First Available vs Action First
-        System.out.println("\n" + "=".repeat(50) + "\n");
+        System.out.println("\n" + "=".repeat(1000) + "\n");
 
-        // Reverse matchups to test if going first matters
-        playMatch(1, 0); // Number First vs First Available
-        System.out.println("\n" + "=".repeat(50) + "\n");
-
-        playMatch(2, 1); // Action First vs Number First
-        System.out.println("\n" + "=".repeat(50) + "\n");
-
-        playMatch(2, 0); // Action First vs First Available
+        playMatch(1, 2); // Number First vs Action First
     }
 
+    /**
+     * Plays a single match between two strategies.
+     * Creates two players with specified strategies and runs a complete game.
+     * Displays game progress and final results.
+     *
+     * @param strat1 Index of the first player's strategy
+     * @param strat2 Index of the second player's strategy
+     */
     private static void playMatch(int strat1, int strat2) {
         System.out.println("Match: " + STRATEGY_NAMES[strat1] + " vs " + STRATEGY_NAMES[strat2]);
 
@@ -106,6 +119,12 @@ public class TwoPlayerMain {
         System.out.println("\nGame over. Deck is empty.");
     }
 
+    /**
+     * Displays the hand of a single player.
+     * Used for debugging and game state visualization.
+     *
+     * @param player The player whose hand to display
+     */
     private static void displayPlayerHand(Player player) {
         List<Card> hand = player.getHand();
         System.out.println(player + " (" + hand.size() + " cards): " +

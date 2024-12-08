@@ -2,13 +2,30 @@ package upei.project;
 
 import java.util.*;
 
+/**
+ * Main class for running a three-player UNO game simulation.
+ * Tests the interaction between three different strategies in a single game.
+ * Provides detailed game state visualization and turn-by-turn progress.
+ */
 public class ThreePlayerMain {
+    /**
+     * Names of the different strategies being tested.
+     * Each player uses a different strategy to evaluate their effectiveness
+     * in a three-player dynamic.
+     */
     private static final String[] STRATEGY_NAMES = {
             "First Available Card Strategy",
             "Number Card First Strategy",
             "Action Card First Strategy"
     };
 
+    /**
+     * Main method that runs a single three-player game.
+     * Each player uses a different strategy, and the game continues
+     * until someone wins or the turn limit is reached.
+     *
+     * @param args Command line arguments (not used)
+     */
     public static void main(String[] args) {
         int turnCount = 0;
         System.out.println("=== UNO Three Player Game ===\n");
@@ -77,16 +94,54 @@ public class ThreePlayerMain {
         System.out.println("\nWinner: " + winner + " with " + winner.getHandSize() + " cards");
     }
 
+    /**
+     * Inner class to hold the result of a player's turn.
+     * Tracks both the played card and any card drawn during the turn.
+     */
     private static class TurnResult {
         Card playedCard;
         Card drawnCard;
 
-        TurnResult(Card playedCard, Card drawnCard) {
-            this.playedCard = playedCard;
-            this.drawnCard = drawnCard;
+        TurnResult(Card played, Card drawn) {
+            this.playedCard = played;
+            this.drawnCard = drawn;
         }
     }
 
+    /**
+     * Displays the current state of the game.
+     * Shows:
+     * - Top card
+     * - Current color
+     * - Direction of play
+     * - Cards in deck
+     *
+     * @param game The current game instance
+     */
+    private static void displayGameState(Game game) {
+        System.out.println("Top card: " + game.getTopCard() + ", Current color: " + game.getCurrentColor());
+    }
+
+    /**
+     * Shows the hands of all players in the game.
+     * Displays each player's cards for game state visualization.
+     *
+     * @param players List of players in the game
+     */
+    private static void displayPlayerHands(List<Player> players) {
+        System.out.println("\nCurrent hands:");
+        for (Player player : players) {
+            displayPlayerHand(player);
+        }
+        System.out.println();
+    }
+
+    /**
+     * Displays a single player's hand.
+     * Shows the player's name and their cards.
+     *
+     * @param player The player whose hand to display
+     */
     private static void displayPlayerHand(Player player) {
         List<Card> hand = player.getHand();
         System.out.println(player + " (" + hand.size() + " cards): " +
@@ -96,6 +151,12 @@ public class ThreePlayerMain {
                         .orElse("Empty hand"));
     }
 
+    /**
+     * Displays the hand sizes of all players in the game.
+     * Shows the number of cards each player has in their hand.
+     *
+     * @param players List of players in the game
+     */
     private static void displayHandSizes(List<Player> players) {
         System.out.print("\nHand sizes - ");
         for (int i = 0; i < players.size(); i++) {
@@ -107,14 +168,14 @@ public class ThreePlayerMain {
         System.out.println();
     }
 
-    private static void displayPlayerHands(List<Player> players) {
-        System.out.println("\nCurrent hands:");
-        for (Player player : players) {
-            displayPlayerHand(player);
-        }
-        System.out.println();
-    }
-
+    /**
+     * Handles a single player's turn based on their strategy.
+     * Implements different play strategies and manages card playing/drawing.
+     *
+     * @param game The current game instance
+     * @param currentPlayer The player whose turn it is
+     * @return TurnResult containing the played card and any drawn card
+     */
     private static TurnResult playTurn(Game game, Player currentPlayer) {
         Card playedCard;
         Card drawnCard = null;
@@ -156,9 +217,5 @@ public class ThreePlayerMain {
             }
         }
         return new TurnResult(playedCard, drawnCard);
-    }
-
-    private static void displayGameState(Game game) {
-        System.out.println("Top card: " + game.getTopCard() + ", Current color: " + game.getCurrentColor());
     }
 }
